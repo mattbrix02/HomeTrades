@@ -5,6 +5,10 @@
       {{ flashsuccess }}
     </div>
 
+    <div v-if="flasherror" class="mb-4 border rounded-md shadow-sm border-red-200 dark:boreder-green-800 bg-red-50 dark:bg-red-900 p-2">
+      {{ flasherror }}
+    </div>
+
     <slot />
   </main>
 </template>
@@ -18,6 +22,10 @@ import Navigation from '@/Components/Navigation.vue'
 const page = usePage()
 const flashsuccess = computed(
   ()=> page.props.flash.success,
+)
+
+const flasherror = computed(
+  ()=> page.props.flash.error,
 )
 
 const user = computed(

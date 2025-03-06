@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
 {
@@ -22,6 +23,10 @@ class ListingController extends Controller
      */
     public function create(Listing $listing)
     {
+        if (! Gate::inspect('create', $listing)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'You are not allowed to create New Listing.');
+        }
+
         return Inertia(
             'Listing/Create'
         );
@@ -32,8 +37,12 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
+        if (! Gate::inspect('create', $request)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'Listing not accesible.');
+        }
 
-        Listing::create($request->validate([
+        $request->user()->listings()->create(
+            $request->validate([
                 'beds' => 'required|integer|min:0|max:20',
                 'baths' => 'required|integer|min:0|max:20',
                 'area' => 'required|integer|min:15|max:1500',
@@ -45,6 +54,7 @@ class ListingController extends Controller
             ])
         );
 
+
         return redirect()->route('listings.index')->with('success','Listing was created!');
     }
 
@@ -53,6 +63,13 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
+
+
+        if (! Gate::inspect('view', $listing)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'Listing not accesible.');
+        }
+
+
         return Inertia(
             'Listing/Show', ['listing'=>$listing]
         );
@@ -63,6 +80,10 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
+        if (! Gate::inspect('update', $listing)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'You are not allowed to edit someone else Listing.');
+        }
+
         return Inertia(
             'Listing/Edit', ["listing" => $listing]
         );
@@ -73,6 +94,11 @@ class ListingController extends Controller
      */
     public function update(Request $request, Listing $listing)
     {
+
+        if (! Gate::inspect('update', $listing)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'You are not allowed to update someone else Listing.');
+        }
+
         $listing->update($request->validate([
             'beds' => 'required|integer|min:0|max:20',
             'baths' => 'required|integer|min:0|max:20',
@@ -93,6 +119,10 @@ class ListingController extends Controller
      */
     public function destroy(Listing $listing)
     {
+        if (! Gate::inspect('delete', $listing)->allowed()) {
+            return redirect()->route('listings.index')->with('error', 'You are not allowed to delete someone else Listing.');
+        }
+
         $listing->delete();
 
         return redirect()->back()->with('success', 'Listing was deleted!');
