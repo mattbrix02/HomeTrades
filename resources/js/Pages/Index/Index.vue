@@ -1,5 +1,9 @@
 <template>
-  <div>The message is {{ message }}</div>
+  <section>
+    <div class="MainPage">
+      The message is {{ message }}
+    </div>
+  </section>
 </template>
 
 <script setup>

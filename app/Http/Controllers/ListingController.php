@@ -15,35 +15,11 @@ class ListingController extends Controller
     {
         $filters =  $request->only(['priceFrom', 'priceTo', 'beds', 'baths', 'areaFrom', 'areaTo']);
 
-        $query = Listing::orderByDesc('created_at')
-            ->when(
-            $filters['priceFrom'] ?? false,
-            fn($query, $value) => $query->where('price','>=',$value)
-            )
-            ->when(
-                $filters['priceTo'] ?? false,
-                fn($query, $value) => $query->where('price','<=',$value)
-            )
-            ->when(
-                $filters['beds'] ?? false,
-                fn($query, $value) => $query->where('beds',(int)$value < 6 ? '=' : '>=',$value)
-            )
-            ->when(
-                $filters['baths'] ?? false,
-                fn($query, $value) => $query->where('baths',(int)$value < 6 ? '=' : '>=',$value)
-            )
-            ->when(
-                $filters['areaFrom'] ?? false,
-                fn($query, $value) => $query->where('area','>=',$value)
-                )
-            ->when(
-                $filters['areaTo'] ?? false,
-                fn($query, $value) => $query->where('area','<=',$value)
-            );
+        Gate::authorize('viewAny', Listing::class);
 
         return Inertia(
             'Listing/Index', [
-                'listings'=> $query->paginate(10)->withQueryString(),
+                'listings'=> Listing::mostRecent()->Filter($filters)->paginate(10)->withQueryString(),
                 'filters' => $filters,
             ]
         );
@@ -54,7 +30,7 @@ class ListingController extends Controller
      */
     public function create(Listing $listing)
     {
-        if (! Gate::inspect('create', $listing)->allowed()) {
+        if (Gate::inspect('create', $listing)->denied()) {
             return redirect()->route('listings.index')->with('error', 'You are not allowed to create New Listing.');
         }
 
@@ -68,7 +44,7 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
-        if (! Gate::inspect('create', $request)->allowed()) {
+        if (Gate::inspect('create', $request)->denied()) {
             return redirect()->route('listings.index')->with('error', 'Listing not accesible.');
         }
 
@@ -94,9 +70,7 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-
-
-        if (! Gate::inspect('view', $listing)->allowed()) {
+        if (Gate::inspect('view', $listing)->denied()) {
             return redirect()->route('listings.index')->with('error', 'Listing not accesible.');
         }
 
@@ -111,7 +85,7 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
-        if (! Gate::inspect('update', $listing)->allowed()) {
+        if (Gate::inspect('update', $listing)->denied()) {
             return redirect()->route('listings.index')->with('error', 'You are not allowed to edit someone else Listing.');
         }
 
@@ -126,7 +100,7 @@ class ListingController extends Controller
     public function update(Request $request, Listing $listing)
     {
 
-        if (! Gate::inspect('update', $listing)->allowed()) {
+        if (Gate::inspect('update', $listing)->denied()) {
             return redirect()->route('listings.index')->with('error', 'You are not allowed to update someone else Listing.');
         }
 
@@ -145,17 +119,5 @@ class ListingController extends Controller
     return redirect()->route('listings.index')->with('success','Listing was updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Listing $listing)
-    {
-        if (! Gate::inspect('delete', $listing)->allowed()) {
-            return redirect()->route('listings.index')->with('error', 'You are not allowed to delete someone else Listing.');
-        }
 
-        $listing->delete();
-
-        return redirect()->back()->with('success', 'Listing was deleted!');
-    }
 }

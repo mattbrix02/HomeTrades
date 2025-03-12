@@ -64,10 +64,10 @@
 </template>
 
 <script setup>
-import ListingAddress from '@/components/ListingAddress.vue'
-import ListingSpace from '@/components/ListingSpace.vue'
-import Price from '@/components/Price.vue'
-import Box from '@/components/UI/Box.vue'
+import ListingAddress from '@/Components/ListingAddress.vue'
+import ListingSpace from '@/Components/ListingSpace.vue'
+import Price from '@/Components/Price.vue'
+import Box from '@/Components/UI/Box.vue'
 
 import {ref } from 'vue'
 import {useMonthlyPayment} from '@/Composables/useMonthlyPayment'

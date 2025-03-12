@@ -25,6 +25,11 @@ class ListingPolicy
         return true;
     }
 
+    public function realtorViewAny(?User $user): bool
+    {
+        return true;
+    }
+
     /**
      * Determine whether the user can view the model.
      */
