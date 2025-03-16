@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //CSRF Token error fix Master Laravel 11 and Vue 3 - Build SPA Application - Lesson 85
 
         $middleware->validateCsrfTokens(except: [
-            '/logout'
+            '/logout', '/realtor/listing/*'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

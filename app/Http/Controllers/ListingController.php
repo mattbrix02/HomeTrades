@@ -31,6 +31,8 @@ class ListingController extends Controller
             return redirect()->route('listings.index')->with('error', 'Listing not accesible.');
         }
 
+        $listing->load(['images']);
+
 
         return Inertia(
             'Listing/Show', ['listing'=>$listing]
