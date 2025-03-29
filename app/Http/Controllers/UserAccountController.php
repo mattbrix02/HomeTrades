@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,9 @@ class UserAccountController extends Controller
 
         //automatically logs new registered user
         Auth::login($user);
+
+        //For Email verification
+        event(new Registered($user));
 
         return redirect()->route('listings.index')->with('success','Your account has been created!');
     }
