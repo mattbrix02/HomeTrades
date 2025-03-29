@@ -9,8 +9,8 @@
 </template>
 <script setup>
 
-import Listing from '@/Pages/Listing/index/components/Listing.vue'
-import Filters from '@/Pages/Listing/index/components/Filters.vue'
+import Listing from '@/Pages/Listing/Index/Components/Listing.vue'
+import Filters from '@/Pages/Listing/Index/Components/Filters.vue'
 import Pagination from '@/Components/UI/Pagination.vue'
 
 defineProps({

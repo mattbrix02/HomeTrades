@@ -23,8 +23,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Brex',
+            'name' => 'Brex2',
             'email' => 'test2@gmail.com',
+        ]);
+        User::factory()->create([
+            'name' => 'Brex3',
+            'email' => 'test3@gmail.com',
         ]);
 
         \App\Models\Listing::factory(10)->create([

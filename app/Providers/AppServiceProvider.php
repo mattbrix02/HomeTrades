@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+
 use App\Models\Listing;
 use App\Policies\ListingPolicy;
+use App\Policies\NotificationPolicy;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -22,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(DatabaseNotification::class, NotificationPolicy::class);
         Gate::policy(Listing::class, ListingPolicy::class);
     }
 }
