@@ -11,12 +11,14 @@
 
     <slot />
   </main>
+  <Footer />
 </template>
 
 <script setup>
 import {computed} from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import Navigation from '@/Components/Navigation.vue'
+import Footer from '@/Components/Footer.vue'
 
 
 const page = usePage()

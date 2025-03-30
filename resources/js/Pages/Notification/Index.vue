@@ -3,7 +3,7 @@
 
   <div class="min-h-[600px]">
     <section v-if="notifications.data.length" class="text-gray-700 dark:text-gray-400">
-      <div v-for="notification in notifications.data" :key="notification.id" class="border border-gray-200 dark:border-gray-800 py-4 flex justify-between items-center">
+      <div v-for="notification in notifications.data" :key="notification.id" class="border border-gray-200 dark:border-gray-800 py-4 flex justify-between items-center pl-4 pr-4">
         <div>
           <span v-if="notification.type === 'App\\Notifications\\OfferMade'">
             An Offer of <Price :price="notification.data.amount" /> was made on your

@@ -1,5 +1,5 @@
 <template>
-  <div>Show!</div>
+  <div class="h-screen">Show!</div>
 </template>
 
 

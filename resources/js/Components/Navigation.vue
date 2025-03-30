@@ -6,15 +6,28 @@
           <Link href="/">HomeTrades</Link>
         </div>
         <div class="text-lg">
-          <Link href="/hello">hello</Link>
+          <Link class="nav-link" href="/hello">Contact us</Link>
         </div>
         <div class="text-lg">
-          <Link :href="route('listings.index')">Listings</Link>
+          <Link class="nav-link" :href="route('listings.index')">Listings</Link>
+        </div>
+        <div v-if="props.user" class="text-lg">
+          <Link class="nav-link" :href="route('realtor.listing.index')">
+            My Realtor
+          </Link>
         </div>
 
-        <div v-if="props.user" class="flex items-center gap-4">
-          <label class="theme_switch">
-            <input id="checkbox" checked="true" type="checkbox" />
+
+
+
+        <div class="flex justify-between gap-4">
+          <label
+            class="theme_switch
+          dark:shadow-[0px_2px_1px_rgba(221,_221,_221,_1),_0_5px_10px_rgba(204,_204,_204,_1)]
+          shadow-[0px_2px_1px_rgba(255,_207,_72,_1),_0_5px_10px_rgba(255,_207,_72,_1)]
+          "
+          >
+            <input id="checkbox" checked="true" type="checkbox" @click="toggleDarkMode" />
             <span class="slider">
               <div class="star star_1" />
               <div class="star star_2" />
@@ -29,29 +42,45 @@
             </span>
           </label>
 
-          <div class="text-gray-500 relative pr-2 py-2 text-lg">
-            <Link :href="route('notification.index')">
-              🔔
-              <div v-if="props.user.notificationCount" class="absolute right-0 top-0 w-5 h-5 bg-red-700 dark:bg-red-400 text-white font-medium border border-white dark:border-gray-900 rounded-full text-xs text-center">
-                {{ props.user.notificationCount }}
+
+
+
+          <div v-if="props.user" class="flex items-center gap-4">
+            <div class="text-gray-500 relative pr-2 py-2 text-lg">
+              <Link :href="route('notification.index')">
+                🔔
+                <div v-if="props.user.notificationCount" class="absolute right-0 top-0 w-5 h-5 bg-red-700 dark:bg-red-400 text-white font-medium border border-white dark:border-gray-900 rounded-full text-xs text-center">
+                  {{ props.user.notificationCount }}
+                </div>
+              </Link>
+            </div>
+
+            <div class="relative inline-block text-left">
+              <!-- Dropdown Button -->
+              <button class="bg-indigo-600 p-2 text-slate-100 font-bold text-sm hover:bg-indigo-400 dark:text-gray-200 rounded-lg" @click="toggleDropdown">
+                . . .
+              </button>
+
+              <!-- Dropdown Menu -->
+              <div v-if="isOpen" ref="dropdownMenu" class="absolute mt-2 w-48 border text-slate-800 border-gray-300 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-100 z-40">
+                <div class="text-sm font-bold rounded-lg">
+                  <div class="p-2 text-sm">
+                    Signed in as <u>{{ props.user.name }}</u>
+                  </div>
+                  <hr class="h-1 mx-2 bg-gray-400 dark:bg-gray-700" />
+                  <div class="flex items-center pt-2 pb-2">
+                    <Link class="w-full" :href="route('logout')" method="DELETE" as="button">Logout</Link>
+                  </div>
+                </div>
               </div>
-            </Link>
-          </div>
-
-          <Link class="text-gray-500 text-sm dark:text-gray-200" :href="route('realtor.listing.index')">
-            {{ props.user.name }}
-          </Link>
-
-          <div class="text-gray-500 text-sm font-bold dark:text-gray-200">
-            <div>
-              <Link :href="route('logout')" method="DELETE" as="button">Logout</Link>
             </div>
           </div>
-        </div>
-        <div v-else class="flex items-center gap-4">
-          <Link :href="route('login')">Sign in</Link>
 
-          <Link :href="route('user-account.create')">Register</Link>
+          <div v-else class="flex items-center gap-4">
+            <Link :href="route('login')">Sign in</Link>
+
+            <Link :href="route('user-account.create')">Register</Link>
+          </div>
         </div>
       </nav>
     </div>
@@ -60,12 +89,44 @@
 
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps,ref, onMounted  } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { onClickOutside } from '@vueuse/core'
+
+const isDark = ref(localStorage.getItem('theme') === 'light')
+
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value
+  document.documentElement.classList.toggle('dark', isDark.value)
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+}
+
+onMounted(() => {
+  if (isDark.value) document.documentElement.classList.add('dark')
+})
+
+
 
 const props = defineProps({
   user: Object,
 })
+
+
+
+const isOpen = ref(false)
+
+// Toggle dropdown
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value
+}
+
+// Close dropdown when clicking outside
+const dropdownMenu = ref(null)
+onClickOutside(dropdownMenu, () => {
+  isOpen.value = false
+})
+
+
 </script>
 
 
@@ -74,13 +135,14 @@ const props = defineProps({
 /* Theme Switch */
 /* The switch - the box around the slider */
 .theme_switch {
+
     font-size: 17px;
     position: relative;
     display: inline-block;
     width: 4em;
     height: 2.2em;
     border-radius: 30px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
   }
 
   /* Hide default HTML checkbox */

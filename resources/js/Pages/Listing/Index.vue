@@ -1,8 +1,11 @@
 <template>
   <Filters :filters="filters" />
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 min-h-[600px]">
-    <Listing v-for="listing in listings.data" :key="listing.id" :listing="listing" />
-  </div>
+  <section class=" min-h-[600px]">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+      <Listing v-for="listing in listings.data" :key="listing.id" :listing="listing" />
+    </div>
+  </section>
+
   <div v-if="listings.data.length" class="w-full flex justify-center mt-4 mb-4">
     <Pagination :links="listings.links" />
   </div>

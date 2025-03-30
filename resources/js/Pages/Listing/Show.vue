@@ -7,7 +7,7 @@
     </Box>
 
     <EmptyState v-else class="md:col-span-7 flex items-center">
-      No images
+      <div class="w-full">No images</div>
     </EmptyState>
 
     <div class="md:col-span-5 flex flex-col gap-4">
