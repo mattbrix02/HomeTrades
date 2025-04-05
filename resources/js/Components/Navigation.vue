@@ -1,17 +1,17 @@
 <template>
   <header class="border-b border-gray-200 bg-white w-full dark:border-gray-700 dark:bg-gray-800">
     <div class="container mx-auto">
-      <nav class="p-4 flex items-center justify-between">
-        <div class="text-xl text-indigo-600 font-bold text-center dark:text-indigo-300 ">
+      <nav class="p-4 items-center md:flex md:justify-between">
+        <div class="text-xl text-indigo-600 font-bold text-center dark:text-indigo-300">
           <Link href="/">HomeTrades</Link>
         </div>
-        <div class="text-lg">
+        <div class="text-sm md:text-lg text-center">
           <Link class="nav-link" href="/hello">Contact us</Link>
         </div>
-        <div class="text-lg">
+        <div class="text-sm md:text-lg text-center">
           <Link class="nav-link" :href="route('listings.index')">Listings</Link>
         </div>
-        <div v-if="props.user" class="text-lg">
+        <div v-if="props.user" class="text-sm md:text-lg text-center">
           <Link class="nav-link" :href="route('realtor.listing.index')">
             My Realtor
           </Link>
@@ -62,7 +62,7 @@
               </button>
 
               <!-- Dropdown Menu -->
-              <div v-if="isOpen" ref="dropdownMenu" class="absolute mt-2 w-48 border text-slate-800 border-gray-300 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-100 z-40">
+              <div v-if="isOpen" ref="dropdownMenu" class="absolute mt-2 w-48 border text-slate-800 border-gray-300 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-100 z-40 -left-40 md:left-0">
                 <div class="text-sm font-bold rounded-lg">
                   <div class="p-2 text-sm">
                     Signed in as <u>{{ props.user.name }}</u>

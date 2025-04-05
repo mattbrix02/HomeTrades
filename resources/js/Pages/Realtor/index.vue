@@ -1,13 +1,13 @@
 <template>
   <h1 class="text-3xl mb-4">Your Listings</h1>
 
-  <section class="flex justify-between">
+  <div class="flex justify-between">
     <RealtorFilter :filters="filters" />
 
     <div class="text-lg">
       <Link :href="route('realtor.listing.create')" class="btn-primary">+ New Listing</Link>
     </div>
-  </section>
+  </div>
 
   <div class="min-h-[600px]">
     <section v-if="listings.data.length" class="grid grid-cols-1 lg:grid-cols-2 gap-2">
@@ -44,9 +44,9 @@
   </div>
 
 
-  <section v-if="listings.data.length" class="w-full flex justify-center mt-4 mb-4">
+  <div v-if="listings.data.length" class="w-full flex justify-center mt-4 mb-4">
     <Pagination :links="listings.links" />
-  </section>
+  </div>
 </template>
 
 <script setup>

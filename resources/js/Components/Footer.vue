@@ -140,7 +140,7 @@
             /></svg>
           </a>
         </div>
-        <p class="mt-8 text-xs leading-5 text-gray-400 md:order-1 md:mt-0">© 2024 MattBrix, Inc. All rights reserved.</p>
+        <p class="mt-8 text-xs leading-5 text-gray-400 md:order-1 md:mt-0 text-pink-500">© 2024 MattBrix, Inc. All rights reserved.</p>
       </div>
     </div>
   </footer>

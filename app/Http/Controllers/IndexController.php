@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Listing;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -10,9 +11,10 @@ class IndexController extends Controller
     public function index(){
 
         return Inertia(
-            'Index/Index', ['message'=>'Hello from Laravel22']
+            'Index/Index', [
+                'recentListings'=> Listing::mostRecent()->withoutSold()->take(10)->get()
 
-
+                ]
         );
     }
 

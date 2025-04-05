@@ -1,6 +1,7 @@
 <template>
+  <RecentListings :listings="recentListings" />
   <div>
-    <div class=" pt-16 pr-4 pb-16 pl-4 mr-auto ml-auto flex flex-col items-center relative lg:flex-row lg:py-32 xl:py-48 md:px-8 dark:text-slate-200">
+    <div class=" pt-16 pr-4 pb-16 pl-4 mr-auto ml-auto flex flex-col items-center relative lg:flex-row lg:py-18 xl:py-20 md:px-8 dark:text-slate-200">
       <div class="flex justify-center items-center w-full h-full lg:w-1/2 lg:justify-end lg:bottom-0 lg:left-0 lg:items-center">
         <img
           alt="" :src="'/storage/assets/DBK8aAb.png'" class="object-contain object-top w-full h-auto lg:w-auto
@@ -280,7 +281,7 @@
         <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div class="mb-16">
             <p class="text-center text-slate-600 dark:text-slate-400 mb-2 font-medium tracking-wide uppercase">testimonial</p>
-            <p class="text-4xl md:text-6xl font-bold tracking-tight text-center">What our happy user says!</p>
+            <p class="text-4xl md:text-6xl font-bold tracking-tight text-center text-indigo-700 dark:text-indigo-400">What our happy user says!</p>
           </div>
           <div class="md:grid-cols-2 md:gap-8 md:max-w-2xl lg:max-w-full mx-auto grid grid-cols-1 gap-5 max-w-lg">
             <div
@@ -442,8 +443,12 @@
 </template>
 
 <script setup>
+import RecentListings from '@/Components/RecentListings.vue'
 
-// Please use state to implement Navbar functionality
+
+defineProps({
+  recentListings:Object,
+})
 
 </script>
 
