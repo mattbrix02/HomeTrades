@@ -29,8 +29,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(DatabaseNotification::class, NotificationPolicy::class);
         Gate::policy(Listing::class, ListingPolicy::class);
 
+        /*
         if($this->app->environment('production')){
             URL::forceScheme('https');
         }
+            */
     }
 }
