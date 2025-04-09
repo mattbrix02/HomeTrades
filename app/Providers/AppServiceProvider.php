@@ -9,6 +9,7 @@ use App\Policies\NotificationPolicy;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(DatabaseNotification::class, NotificationPolicy::class);
         Gate::policy(Listing::class, ListingPolicy::class);
+
+        if($this->app->environment('production')){
+            URL::forceScheme('https');
+        }
     }
 }
