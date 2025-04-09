@@ -13,8 +13,8 @@
 </template>
 <script setup>
 
-import Listing from '@/Pages/Listing/Index/Components/Listing.vue'
-import Filters from '@/Pages/Listing/Index/Components/Filters.vue'
+import Listing from '@/Pages/Listing/index/Components/Listing.vue'
+import Filters from '@/Pages/Listing/index/Components/Filters.vue'
 import Pagination from '@/Components/UI/Pagination.vue'
 
 defineProps({
