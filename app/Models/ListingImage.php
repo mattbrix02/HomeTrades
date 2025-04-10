@@ -19,6 +19,7 @@ class ListingImage extends Model
 
     //Kebab case: another ex: getRealSrcAttribute = real_src
     public function getSrcAttribute(){
+        DD($this);
         return asset("storage/{$this->filename}");
     }
 }
