@@ -1,26 +1,26 @@
 <template>
   <header class="border-b border-gray-200 bg-white w-full dark:border-gray-700 dark:bg-gray-800">
-    <div class="container mx-auto">
-      <nav class="p-4 items-center md:flex md:justify-between">
-        <div class="text-xl text-indigo-600 font-bold text-center dark:text-indigo-300">
+    <div class="container mx-auto flex justify-between">
+      <div class="w-2/3 flex justify-between items-center text-center ">
+        <div class="p-4 text-xl text-indigo-600 font-bold  dark:text-indigo-300">
           <Link href="/">HomeTrades</Link>
         </div>
-        <div class="text-sm md:text-lg text-center">
+
+        <div class="text-sm md:text-lg hidden md:inline">
           <Link class="nav-link" href="/hello">Contact us</Link>
         </div>
-        <div class="text-sm md:text-lg text-center">
+        <div class="text-sm md:text-lg hidden md:inline">
           <Link class="nav-link" :href="route('listings.index')">Listings</Link>
         </div>
-        <div v-if="props.user" class="text-sm md:text-lg text-center">
+        <div v-if="props.user" class="text-sm md:text-lg hidden md:inline">
           <Link class="nav-link" :href="route('realtor.listing.index')">
             My Realtor
           </Link>
         </div>
+      </div>
 
-
-
-
-        <div class="flex justify-between gap-4">
+      <nav class="p-4 items-center md:flex md:justify-between">
+        <div class="flex gap-4">
           <label
             class="theme_switch
           dark:shadow-[0px_2px_1px_rgba(221,_221,_221,_1),_0_5px_10px_rgba(204,_204,_204,_1)]
@@ -58,16 +58,32 @@
             <div class="relative inline-block text-left">
               <!-- Dropdown Button -->
               <button class="bg-indigo-600 p-2 text-slate-100 font-bold text-sm hover:bg-indigo-400 dark:text-gray-200 rounded-lg" @click="toggleDropdown">
-                . . .
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
               </button>
 
               <!-- Dropdown Menu -->
               <div v-if="isOpen" ref="dropdownMenu" class="absolute mt-2 w-48 border text-slate-800 border-gray-300 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-100 z-40 -left-40 md:left-0">
                 <div class="text-sm font-bold rounded-lg">
+                  <div class="md:hidden">
+                    <div class="text-sm md:text-lg text-center">
+                      <Link class="nav-link" href="/hello">Contact us</Link>
+                    </div>
+                    <div class="text-sm md:text-lg text-center">
+                      <Link class="nav-link" :href="route('listings.index')">Listings</Link>
+                    </div>
+                    <div v-if="props.user" class="text-sm md:text-lg text-center">
+                      <Link class="nav-link" :href="route('realtor.listing.index')">
+                        My Realtor
+                      </Link>
+                    </div>
+                  </div>
+                  <hr class="h-1 mx-2 bg-gray-400 dark:bg-gray-700" />
                   <div class="p-2 text-sm">
                     Signed in as <u>{{ props.user.name }}</u>
                   </div>
-                  <hr class="h-1 mx-2 bg-gray-400 dark:bg-gray-700" />
+
                   <div class="flex items-center pt-2 pb-2">
                     <Link class="w-full" :href="route('logout')" method="DELETE" as="button">Logout</Link>
                   </div>
