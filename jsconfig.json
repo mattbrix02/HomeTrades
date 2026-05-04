@@ -1,15 +1,15 @@
 {
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@/*": [
-          "resources/js/*"
-        ]
-      },
-      "jsx": "preserve",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "resources/js/*"
+      ]
     },
-    "exclude": [
-      "node_modules",
-      "public"
-    ]
-  }
+    "jsx": "preserve",
+  },
+  "exclude": [
+    "node_modules",
+    "public"
+  ]
+}

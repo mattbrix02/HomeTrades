@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
-use Illuminate\Http\Request;
+use App\Models\Course;
 
 class IndexController extends Controller
 {
 
     public function index(){
 
-        return Inertia(
-            'Index/Index', [
-                'recentListings'=> Listing::mostRecent()->withoutSold()->take(10)->get()
 
-                ]
-        );
+
+        $courses = Course::all();
+
+
+        return Inertia('Index/Index', [
+            'courses' => $courses,
+        ]);
+
     }
 
 
     public function show() {
-        return inertia('Index/Show');
+        return Inertia('Index/Show');
     }
 }
