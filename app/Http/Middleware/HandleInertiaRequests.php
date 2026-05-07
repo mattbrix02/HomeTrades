@@ -42,9 +42,13 @@ class HandleInertiaRequests extends Middleware
             ],
             'user' => $request->user() ? [
                 'id' => $request->user()->id,
+                'dasid' => $request->user()->dasid,
+                'role' => $request->user()->role,
+                'location' => $request->user()->location,
+                'group' => $request->user()->group,
                 'email' => $request->user()->email,
-                'name' => $request->user()->name,
-                'notificationCount' => $request->user()->unreadNotifications()->count()
+                'first_name' => $request->user()->first_name,
+                'last_name' => $request->user()->last_name,
             ] : null
         ]);
     }

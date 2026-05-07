@@ -22,6 +22,7 @@
             type="text"
             required
             class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+            placeholder="e.g. Laravel Basics"
           />
           <div v-if="form.errors.title" class="input-error">
             {{ form.errors.title }}
@@ -29,42 +30,96 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Instructor</label>
-          <input
-            v-model="form.instructor"
-            type="text"
-            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+          <label class="block text-sm font-medium text-slate-700 mb-2">Short Description</label>
+
+          <Tiptap
+            v-model="form.short_description" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+            placeholder="Short description..."
           />
-          <div v-if="form.errors.instructor" class="input-error">
-            {{ form.errors.instructor }}
+
+          <div v-if="form.errors.short_description" class="input-error">
+            {{ form.errors.short_description }}
           </div>
         </div>
 
+
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
-          <textarea
-            v-model="form.description"
-            rows="4"
-            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+
+          <Tiptap
+            v-model="form.description" rows="5" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+            placeholder="Course description..."
           />
+
           <div v-if="form.errors.description" class="input-error">
             {{ form.errors.description }}
           </div>
         </div>
 
+
+
+        
         <div class="flex flex-col sm:flex-row gap-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Publish date</label>
+            <input
+              v-model="form.publish_date"
+              type="datetime-local"
+              required
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+              placeholder="mm/dd/yyyy"
+            />
+            <div v-if="form.errors.publish_date" class="input-error">
+              {{ form.errors.publish_date }}
+            </div>  
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Expiration date</label>
+            <input
+              v-model="form.expiration_date"
+              type="datetime-local"
+              required
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+              placeholder="mm/dd/yyyy"
+            />
+            <div v-if="form.errors.expiration_date" class="input-error">
+              {{ form.errors.expiration_date }}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Instructor</label>
+
+
+            <select v-model="form.instructor" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+              <option value="" disabled>Select an Instructor</option>
+              <option v-for="instructor in props.instructors" :key="instructor.id" :value="instructor.id">
+                {{ instructor.name }}
+              </option>
+            </select>
+
+            <div v-if="form.errors.instructor" class="input-error">
+              {{ form.errors.instructor }}
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="flex justify-between">
           <Link
-            class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
+            type="button"
+            class="btn_cancel"
             :href="route('courses.index')"
           >
             Cancel
           </Link>
           <button
             type="submit"
-
-            class="w-full sm:w-auto px-5 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition"
+            label="Submit"
+            class="btn_main"
           >
-            Save Changes
+            Create Course
           </button>
         </div>
       </form>
@@ -74,6 +129,7 @@
 
 <script setup>
 
+import Tiptap from '@/Components/vendor/tiptap.vue'
 import { Link } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
 
@@ -86,7 +142,12 @@ const form = useForm({
   id: props.course.id || '',
   title: props.course.title || '',
   instructor: props.course.instructor || '',
-  description: props.course.description || '',
+  description: props.course.short_description || '',
+  short_description: props.course.description || '',
+
+  publish_date: props.course.publish_date || '',
+  expiration_date: props.course.expiration_date || '',
+
 })
 
 

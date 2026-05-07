@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Course extends Model
 {
     protected $fillable = [
         'title',
         'description',
+        'short_description',
         'instructor',
+        'created_by',
+        'publish_date',
+        'expiration_date',
+        'status',
+        'last_modified_by'
     ];
-
-
-    public function Course():BelongsTo{
-        return $this->belongsTo(User::class, 'created_by');
-    }
 }

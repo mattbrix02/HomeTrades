@@ -9,14 +9,13 @@
 
     <div class="mb-4">
       <input
-        v-model="search"
-        type="search"
+
         placeholder="Search courses..."
         class="w-full p-3 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
       />
     </div>
 
-    <Course :courses="courses" :search-query="search" />
+    <Course :courses="courses" :user="user" />
   </main>
 </template>
 
@@ -24,6 +23,10 @@
 import Course from '@/Components/Course.vue'
 
 defineProps({
+  user: {
+    type: Object,
+    default: null,
+  },
   courses: {
     type: Array,
     default: () => [],

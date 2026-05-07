@@ -66,7 +66,7 @@
     <!-- Search -->
     <div>
       <input
-        v-model="search"
+
         type="text"
         placeholder="Search courses or updates..."
         class="w-full p-3 rounded-xl border border-slate-300 bg-white
@@ -79,10 +79,10 @@
     <div class="grid md:grid-cols-2 gap-6">
       <Course
         :courses="props.courses"
-        :search-query="search"
+        :user="props.user"
       />
 
-      <CascaderUpdates :updates="updates" :search="search" />
+      <CascaderUpdates :updates="updates" />
     </div>
   </main>
 </template>
@@ -94,7 +94,6 @@ import Course from '../../Components/Course.vue'
 import CascaderUpdates from '@/Components/CascaderUpdates.vue'
 
 // Search
-const search = ref('')
 
 // Carousel
 const activeSlide = ref(0)
@@ -111,6 +110,10 @@ const prevSlide = () => {
 
 
 const props = defineProps({
+  user: {
+    type: Object,
+    default: null,
+  },
   courses: {
     type: Array,
     default: () => [],

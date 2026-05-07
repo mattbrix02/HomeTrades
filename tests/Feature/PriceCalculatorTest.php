@@ -1,3 +1,4 @@
+<?php 
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase; // Standard PHPUnit class
@@ -18,3 +19,5 @@ class PriceCalculatorTest extends TestCase
         $this->assertEquals(120, $total);
     }
 }
+
+?>

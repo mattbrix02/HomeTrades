@@ -6,12 +6,11 @@
         <p class="text-sm text-slate-500">View courses, open edit pages, and delete entries safely.</p>
       </div>
       <Link
-        class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-white font-medium
-               bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600
-               shadow-md transition"
+        v-if="user?.role === 'admin'"
+        class="btn_main"
         :href="route('courses.create')"
       >
-        <div>+ Course</div>
+        <div>+ Course </div>
       </Link>
     </div>
 
@@ -20,7 +19,7 @@
         <div
           v-for="course in courses"
           :key="course.id"
-          class="p-4 rounded-lg border border-slate-200 bg-white hover:shadow-md transition group"
+          class="course_row group"
         >
           <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div class="flex-1">
@@ -33,21 +32,23 @@
               </p>
             </div>
 
+            
+
             <div class="flex flex-wrap gap-2 opacity-0 group-hover:opacity-100 transition">
               <Link
-                class="px-3 py-1 text-sm rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+                class="btn_view"
                 :href="route('courses.show', course)"
               >
                 View
               </Link>
               <Link
-                class="px-3 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
+                class="btn_edit"
                 :href="route('courses.edit', course)"
               >
                 Edit
               </Link>
               <Link
-                class="px-3 py-1 text-sm rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition"
+                class="btn_delete"
                 :href="route('courses.destroy', course)"
                 method="DELETE"
               >
@@ -70,14 +71,17 @@
 import { Link } from '@inertiajs/vue3'
 
 defineProps({
+
+  user :{
+    type: Object,
+    default: null,
+  },
+
   courses: {
     type: Array,
     default: () => [],
   },
-  searchQuery: {
-    type: String,
-    default: '',
-  },
 })
+
 
 </script>

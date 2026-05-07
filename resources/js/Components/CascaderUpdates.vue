@@ -4,9 +4,9 @@
       Cascader Updates
     </h2>
 
-    <div v-if="filteredUpdates.length">
+    <div v-if="updates.length">
       <div
-        v-for="update in filteredUpdates"
+        v-for="update in updates"
         :key="update.id"
         class="p-3 mb-2 rounded-lg cursor-pointer
                  hover:bg-indigo-50 transition"
@@ -31,17 +31,9 @@ import { computed } from 'vue'
 
 const props = defineProps({
   updates: Object,
-  search: String,
+
 })
 
-
-
-// Filtering for Updates
-const filteredUpdates = computed(() =>
-  props.updates.filter(u =>
-    u.title.toLowerCase().includes(props.search.toLowerCase()),
-  ),
-)
 
 
 </script>

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CourseController extends Controller
@@ -26,7 +28,18 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return Inertia('Course/Create');
+
+
+        $course_instructors = User::getInstructors()
+        ->get()
+        ->map(fn ($user) => [
+            'id' => $user->id,
+            'dasid' => $user->dasid,
+            'name' => $user->first_name . ' ' . $user->last_name
+        ]);
+
+
+        return Inertia('Course/Create', ['instructors' => $course_instructors]);
     }
 
     /**
@@ -35,11 +48,16 @@ class CourseController extends Controller
     public function store(Request $request)
     {
 
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'instructor' => 'nullable|string|max:255',
+            'instructor' => 'required|exists:users,id',
+            'publish_date' => 'required|date',
+            'expiration_date' => 'required|date|nullable'
         ]);
+
+        $validated['created_by'] = Auth::id();
 
         $course = Course::create($validated);
 
@@ -51,7 +69,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        return Inertia::render('Course/Show', [
+        return Inertia('Course/Show', [
             'course' => $course,
         ]);
     }
@@ -61,7 +79,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return Inertia::render('Course/Edit', [
+        return Inertia('Course/Edit', [
             'course' => $course,
         ]);
     }
@@ -74,7 +92,10 @@ class CourseController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|min:3|max:255',
             'description' => 'nullable|string',
+            'short_description' => 'nullable|string',
             'instructor' => 'nullable|string|max:255',
+            'publish_date' => 'required|date',
+            'expiration_date' => 'required|date|nullable'
         ]);
 
         $course->update($validated);

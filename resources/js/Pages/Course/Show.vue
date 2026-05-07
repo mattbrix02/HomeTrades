@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
         <h1 class="text-3xl font-bold text-slate-900">{{ course.title }}</h1>
-        <p class="mt-2 text-slate-600">Review course details in the same clean course style.</p>
+        <p class="mt-2 text-slate-600">Review course details</p>
       </div>
       <Link
 
@@ -26,13 +26,14 @@
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="sub_label">
           <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Course ID</h3>
           <p class="mt-2 text-slate-900">{{ course.id }}</p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="sub_label">
           <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Last updated</h3>
-          <p class="mt-2 text-slate-900">{{ course.updated_at || 'N/A' }}</p>
+          <p class="mt-2 text-slate-900">{{ postedTime || 'N/A' }}</p>
+          <p class="mt-2 text-slate-900">{{ postedDate || 'N/A' }}</p>
         </div>
       </div>
     </div>
@@ -41,11 +42,19 @@
 
 <script setup>
 import { usePage, Link } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
 const page = usePage()
 const course = page.props.course || {}
 
-const goBack = () => {
-  window.location.href = route('courses.index')
-}
+
+const postedTime = computed(
+  () => new Date(course.created_at).toLocaleTimeString(),
+)
+
+const postedDate = computed(
+  () => new Date(course.created_at).toDateString(),
+)
+
+
 </script>

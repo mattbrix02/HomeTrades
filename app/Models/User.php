@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder; 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,8 +19,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'dasid',
+        'first_name',
+        'last_name',
         'email',
+        'role',
+        'country',
         'password',
     ];
 
@@ -34,21 +39,23 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function getNameAttribute()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return trim("{$this->first_name} {$this->last_name}");
     }
 
 
 /*
-    
+
     public function listings(): HasMany {
         return $this->hasMany(Listing::class, 'by_user_id');
     }
@@ -57,4 +64,10 @@ class User extends Authenticatable
     public function Course():HasMany{
         return $this->hasMany(Course::class, 'created_by');
     }
+
+
+    public function scopeGetInstructors(Builder $query): Builder{
+        return $query->where('instructor', true);
+    }
+    
 }
