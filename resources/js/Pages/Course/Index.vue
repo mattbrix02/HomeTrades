@@ -8,11 +8,7 @@
     </div>
 
     <div class="mb-4">
-      <input
-
-        placeholder="Search courses..."
-        class="w-full p-3 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-      />
+      <CourseFilter :filters="filters" />
     </div>
 
     <Course :courses="courses" :user="user" />
@@ -21,6 +17,7 @@
 
 <script setup>
 import Course from '@/Components/Course.vue'
+import CourseFilter from './Components/CourseFilter.vue'
 
 defineProps({
   user: {
@@ -28,8 +25,12 @@ defineProps({
     default: null,
   },
   courses: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: null,
+  },
+  filters: {
+    type: Object,
+    default: () => ({}),
   },
 })
 

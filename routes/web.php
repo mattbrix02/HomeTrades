@@ -14,7 +14,8 @@ Route::get('/show', [IndexController::class, 'show'])->name('index.show');
 
 
 // Course Resource Routes (CRUD)
-Route::resource('courses', CourseController::class)->middleware('auth');
+Route::resource('courses', CourseController::class)->only(['index', 'show']);
+Route::resource('courses', CourseController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'create'])->name('login')->middleware('guest');
 Route::resource('auth', AuthController::class);

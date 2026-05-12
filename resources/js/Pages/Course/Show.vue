@@ -8,7 +8,7 @@
       <Link
 
         class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 transition"
-        :href="route('index.index')"
+        :href="route('courses.index')"
       >
         Back to courses
       </Link>
@@ -21,8 +21,19 @@
       </div>
 
       <div class="space-y-2">
+        <h2 class="text-xl font-semibold text-slate-900">Short Description</h2>
+        <p 
+          class="text-slate-700" 
+          v-html="course.short_description || '<i>No short description provided yet.</i>'"
+        />
+      </div>
+
+      <div class="space-y-2">
         <h2 class="text-xl font-semibold text-slate-900">Description</h2>
-        <p class="text-slate-700">{{ course.description || 'No description provided yet.' }}</p>
+        <p 
+          class="text-slate-700" 
+          v-html="course.description || '<i>No description provided yet.</i>'"
+        />
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">

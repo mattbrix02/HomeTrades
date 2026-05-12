@@ -63,23 +63,12 @@
       </div>
     </div>
 
-    <!-- Search -->
-    <div>
-      <input
-
-        type="text"
-        placeholder="Search courses or updates..."
-        class="w-full p-3 rounded-xl border border-slate-300 bg-white
-             focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-             outline-none transition"
-      />
-    </div>
 
     <!-- Content Grid -->
     <div class="grid md:grid-cols-2 gap-6">
       <Course
-        :courses="props.courses"
-        :user="props.user"
+        :courses="courses"
+        :user="user"
       />
 
       <CascaderUpdates :updates="updates" />
@@ -92,6 +81,7 @@ import { ref } from 'vue'
 
 import Course from '../../Components/Course.vue'
 import CascaderUpdates from '@/Components/CascaderUpdates.vue'
+
 
 // Search
 
@@ -109,14 +99,18 @@ const prevSlide = () => {
 }
 
 
-const props = defineProps({
+defineProps({
   user: {
     type: Object,
     default: null,
   },
   courses: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: null,
+  },
+  filters: {
+    type: Object,
+    default: () => ({}),
   },
 })
 

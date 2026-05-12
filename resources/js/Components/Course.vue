@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
       <div>
         <h2 class="text-lg font-semibold text-slate-800"><Link :href="route('courses.index')">Courses</Link></h2>
-        <p class="text-sm text-slate-500">View courses, open edit pages, and delete entries safely.</p>
+        <p class="text-sm text-slate-500">View courses here</p>
       </div>
       <Link
         v-if="user?.role === 'admin'"
@@ -15,39 +15,44 @@
     </div>
 
     <div class="space-y-3">
-      <div v-if="courses.length" class="space-y-2">
+      <div v-if="props.courses.data.length" class="space-y-2">
         <div
-          v-for="course in courses"
+          v-for="course in courses.data"
           :key="course.id"
           class="course_row group"
         >
           <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div class="flex-1">
               <h3 class="font-semibold text-slate-900">{{ course.title }}</h3>
-              <p v-if="course.instructor" class="text-sm text-slate-600">
-                Instructor: {{ course.instructor }}
+              <p v-if="course.createdby" class="text-sm text-slate-600">
+                Instructor: {{ course.createdby.first_name + " " + course.createdby.last_name }}
               </p>
-              <p v-if="course.description" class="text-sm text-slate-700 mt-2">
-                {{ course.description }}
-              </p>
+              
+              <p 
+                class="text-slate-700" 
+                v-html="course.short_description || '<i>No short description provided yet.</i>'"
+              />
             </div>
 
-            
+
 
             <div class="flex flex-wrap gap-2 opacity-0 group-hover:opacity-100 transition">
               <Link
+
                 class="btn_view"
                 :href="route('courses.show', course)"
               >
                 View
               </Link>
               <Link
+                v-if="user?.role === 'admin' || user?.id === course.created_by"
                 class="btn_edit"
                 :href="route('courses.edit', course)"
               >
                 Edit
               </Link>
               <Link
+                v-if="user?.role === 'admin' || user?.id === course.created_by"
                 class="btn_delete"
                 :href="route('courses.destroy', course)"
                 method="DELETE"
@@ -70,7 +75,7 @@
 
 import { Link } from '@inertiajs/vue3'
 
-defineProps({
+const props = defineProps({
 
   user :{
     type: Object,
@@ -78,8 +83,8 @@ defineProps({
   },
 
   courses: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: null,
   },
 })
 

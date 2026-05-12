@@ -15,8 +15,8 @@
 
       <!-- Navigation Links -->
       <div class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Dashboard</a>
-        <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Courses</a>
+        <a :href="route('auth.admin')" class="text-slate-600 hover:text-indigo-600 transition">Dashboard</a>
+        <Link :href="route('courses.index')" class="text-slate-600 hover:text-indigo-600 transition">Courses</Link>
         <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Assessments</a>
         <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Reports</a>
       </div>

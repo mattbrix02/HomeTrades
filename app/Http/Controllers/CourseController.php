@@ -13,12 +13,19 @@ class CourseController extends Controller
     /**
      * Display a listing of the courses.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
+        $filters =  $request->only(['search']);
+
+        $courses = Course::with('createdby:id,first_name,last_name')
+                    ->Filter($filters)
+                    ->paginate(10)
+                    ->withQueryString();
+
 
         return Inertia('Course/Index', [
             'courses' => $courses,
+            'filters' => $filters
         ]);
     }
 
@@ -52,6 +59,7 @@ class CourseController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'short_description' => 'nullable|string',
             'instructor' => 'required|exists:users,id',
             'publish_date' => 'required|date',
             'expiration_date' => 'required|date|nullable'
@@ -79,8 +87,15 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
+        $course_instructors = User::getInstructors()->get()->map(fn ($user) => [
+                'id' => $user->id,
+                'dasid' => $user->dasid,
+                'name' => $user->first_name . ' ' . $user->last_name
+        ]);
+
         return Inertia('Course/Edit', [
             'course' => $course,
+            'instructors' => $course_instructors
         ]);
     }
 

@@ -58,7 +58,7 @@
 
 
 
-        
+
         <div class="flex flex-col sm:flex-row gap-3">
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Publish date</label>
@@ -71,7 +71,7 @@
             />
             <div v-if="form.errors.publish_date" class="input-error">
               {{ form.errors.publish_date }}
-            </div>  
+            </div>
           </div>
 
           <div>
@@ -104,7 +104,7 @@
             </div>
           </div>
         </div>
-        
+
 
         <div class="flex justify-between">
           <Link
@@ -119,7 +119,7 @@
             label="Submit"
             class="btn_main"
           >
-            Create Course
+            Update Course
           </button>
         </div>
       </form>
@@ -136,14 +136,18 @@ import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
   course:Object,
+  instructors: {
+    type: Array,
+    default: () => [],
+  },
 })
 
 const form = useForm({
   id: props.course.id || '',
   title: props.course.title || '',
   instructor: props.course.instructor || '',
-  description: props.course.short_description || '',
-  short_description: props.course.description || '',
+  description: props.course.description || '',
+  short_description: props.course.short_description || '',
 
   publish_date: props.course.publish_date || '',
   expiration_date: props.course.expiration_date || '',
