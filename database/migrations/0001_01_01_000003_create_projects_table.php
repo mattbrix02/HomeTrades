@@ -12,18 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->text('short_description')->nullable();
-            $table->string('instructor')->nullable();
             $table->dateTime('publish_date')->nullable();
             $table->dateTime('expiration_date')->nullable();
-            $table->enum('status', ['draft', 'published'])->default('draft');
-            $table->foreignIdFor(User::class, 'created_by')->constrained('users');
-            $table->foreignId('last_modified_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
+            $table->foreignIdFor(User::class, 'created_by')->constrained('users');
         });
     }
 
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('projects');
     }
 };

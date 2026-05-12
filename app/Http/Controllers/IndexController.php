@@ -17,7 +17,7 @@ class IndexController extends Controller
 
         $courses = Course::with('createdby:id,first_name,last_name')
         ->Filter($filters)
-        ->paginate(10)
+        ->paginate(5)
         ->withQueryString();
 
         return Inertia('Index/Index', [

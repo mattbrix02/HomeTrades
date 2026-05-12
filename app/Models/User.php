@@ -54,15 +54,15 @@ class User extends Authenticatable
     }
 
 
-/*
 
-    public function listings(): HasMany {
-        return $this->hasMany(Listing::class, 'by_user_id');
-    }
-*/
 
-    public function Course():HasMany{
+    public function Courses():HasMany{
         return $this->hasMany(Course::class, 'created_by');
+    }
+
+    
+    public function Projects(): HasMany {
+        return $this->hasMany(project::class, 'created_by');
     }
 
 

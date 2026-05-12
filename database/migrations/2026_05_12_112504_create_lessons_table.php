@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->text('short_description')->nullable();
             $table->text('description')->nullable();
+            $table->text('material');
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();

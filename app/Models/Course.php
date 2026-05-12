@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Course extends Model
 {
+
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'description',
@@ -17,7 +21,8 @@ class Course extends Model
         'publish_date',
         'expiration_date',
         'status',
-        'last_modified_by'
+        'last_modified_by',
+        'project_id'
     ];
 
 
@@ -25,13 +30,22 @@ class Course extends Model
             return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function project():BelongsTo {
+        return $this->belongsTo(project::class, 'project_id');
+}
+
 
 
      public function scopeFilter(Builder $query, array $filters):Builder{
 
         return $query->when(
             $filters['search'] ?? false,
-            fn(Builder $query, $value): Builder => $query->where('title','LIKE', "%".$value."%")
+            fn(Builder $query, $value): Builder => 
+                $query->where(function (Builder $query) use ($value) {
+                    $query->where('title', 'LIKE', "%{$value}%")
+                        ->orWhere('description', 'LIKE', "%{$value}%")
+                        ->orWhere('short_description', 'LIKE', "%{$value}%");
+            })
             );
             /*
             ->when(

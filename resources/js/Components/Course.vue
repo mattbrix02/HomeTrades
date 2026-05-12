@@ -62,6 +62,7 @@
             </div>
           </div>
         </div>
+        <Pagination :links="courses.links" />
       </div>
 
       <p v-else class="text-sm text-slate-500 text-center py-4">
@@ -74,6 +75,7 @@
 <script setup>
 
 import { Link } from '@inertiajs/vue3'
+import Pagination from '@/Components/UI/Pagination.vue'
 
 const props = defineProps({
 
