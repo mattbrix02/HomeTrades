@@ -56,6 +56,11 @@ class AuthController extends Controller
             return redirect()->route('index.index');
         }
 
-        return Inertia::render('Admin/Index');
+        $projects = \App\Models\Project::query()->latest('id')->paginate(10);
+
+        return Inertia::render('Admin/Index', [
+            'projects' => $projects,
+            'user' => $user,
+        ]);
     }
 }

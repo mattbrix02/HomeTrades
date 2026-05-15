@@ -13,7 +13,8 @@
 
 
     </head>
-    <body class="bg-white  text-gray-800 dark:bg-gray-900 dark:text-gray-300" class="{{ session('theme', 'light') }}">
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-300 {{ session('theme', 'light') }}">
+
         @inertia
     </body>
 </html>

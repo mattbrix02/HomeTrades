@@ -8,20 +8,28 @@ use App\Http\Requests\UpdateProjectRequest;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+
+        $projects = Project::query()
+            ->latest('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return inertia('Project/Index', [
+            'projects' => $projects,
+            'filters' => [],
+            'user' => auth()->user(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        return inertia('Project/Create', [
+            'user' => auth()->user(),
+        ]);
     }
 
     /**
@@ -29,38 +37,60 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+
+
+        $validated = $request->validated();
+
+        $project = Project::create([
+            'title' => $validated['title'],
+            'created_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('projects.index')->with('success', 'Project was created!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Project $project)
     {
-        //
+
+
+        return inertia('Project/Show', [
+            'project' => $project,
+            'user' => auth()->user(),
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Project $project)
     {
-        //
+
+
+        return inertia('Project/Edit', [
+            'project' => $project,
+            'user' => auth()->user(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+
+
+        $validated = $request->validated();
+
+        $project->update([
+            'title' => $validated['title'],
+        ]);
+
+        return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Project $project)
     {
-        //
+
+        $project->delete();
+
+        return redirect()->route('projects.index')->with('success', 'Project archived successfully!');
     }
 }
+

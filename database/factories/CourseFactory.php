@@ -22,7 +22,10 @@ class CourseFactory extends Factory
             'title' => fake()->sentence(),
             'description' => fake()->sentences(3, true),
             'short_description' => fake()->sentences(1, true),
-            'instructor' => '11',
+            'instructor' => function () {
+                return User::where('instructor', true)->inRandomOrder()->first()?->id 
+                    ?? User::factory()->state(['instructor' => true])->create()->id;
+            },
             'publish_date' => fake()->dateTime(),
             'expiration_date' => collect(['2026-07-30 16:50:33', null])->random(),
             'project_id' => Project::inRandomOrder()->first()->id,

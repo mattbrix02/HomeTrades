@@ -1,0 +1,88 @@
+/*
+  Global Theme overrides (Black matte / Silver)
+  - Dark: black-matte background + silver text
+  - Light: silver-ish surfaces
+
+  This file is intentionally CSS-based so we can override existing Tailwind classes
+  without refactoring every Vue page.
+*/
+
+:root {
+  /* Silver/neutral tokens for light */
+  --km-bg: #f8fafc;          /* slate-50-ish */
+  --km-surface: #ffffff;    /* white */
+  --km-text: #0f172a;       /* slate-900 */
+  --km-muted: #475569;      /* slate-600 */
+  --km-border: #e2e8f0;    /* slate-200 */
+  --km-ring: rgba(99, 102, 241, 0.25);
+}
+
+html.dark {
+  /* Black matte modern palette */
+  --km-bg: #0b0d10;          /* near-black */
+  --km-surface: #101418;    /* matte dark surface */
+  --km-text: #e5e7eb;       /* light/gray text (silver) */
+  --km-muted: #a3a3a3;      /* muted silver */
+  --km-border: #263041;     /* dark border */
+  --km-ring: rgba(129, 140, 248, 0.28);
+}
+
+/* Apply tokens globally */
+body {
+  background-color: var(--km-bg) !important;
+  color: var(--km-text) !important;
+}
+
+/* Common “card” surfaces: override many bg-white/bg-slate-* patterns */
+.bg-white,
+.bg-slate-50,
+.bg-slate-100,
+.bg-slate-200 {
+  background-color: var(--km-surface) !important;
+  color: var(--km-text) !important;
+  border-color: var(--km-border) !important;
+}
+
+/* Text colors */
+.text-gray-800,
+.text-slate-800,
+.text-slate-900,
+.text-slate-700,
+.text-slate-600 {
+  color: var(--km-text) !important;
+}
+
+.text-slate-600,
+.text-slate-500,
+.text-slate-400 {
+  color: var(--km-muted) !important;
+}
+
+/* Borders */
+border-slate-200,
+.border-slate-200,
+.border-slate-300,
+.border-slate-100 {
+  border-color: var(--km-border) !important;
+}
+
+/* Inputs/selects focus rings (Tailwind uses box-shadow) */
+:where(input, select, textarea):focus {
+  box-shadow: 0 0 0 2px var(--km-ring) !important;
+}
+
+/* Tiptap content often uses its own colors */
+.tiptap-prosemirror {
+  color: var(--km-text) !important;
+}
+
+.tiptap-prosemirror p,
+.tiptap-prosemirror ul,
+.tiptap-prosemirror ol {
+  color: var(--km-text) !important;
+}
+
+html.dark .tiptap-prosemirror a {
+  color: #93c5fd !important; /* light blue */
+}
+

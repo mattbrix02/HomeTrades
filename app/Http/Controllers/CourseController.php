@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+
 
 class CourseController extends Controller
 {
@@ -15,16 +18,38 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $filters =  $request->only(['search']);
+        
+
+        $filters =  [
+            'showDeleted' => $request->boolean('showDeleted') ?? null,
+            'search' => $request->string('search') ?? null,
+            'instructor' => $request->integer('instructor') ?? null,
+            'author' => $request->integer('author') ?? null
+        ];
+
+
+        
 
         $courses = Course::with('createdby:id,first_name,last_name')
                     ->Filter($filters)
                     ->paginate(10)
                     ->withQueryString();
 
+        $instructors =  User::getInstructors()
+            ->orderBy('first_name', 'ASC')
+            ->orderBy('last_name', 'ASC')
+            ->get(['id','first_name','last_name']);
+
+        $authors = User::whereHas('courses') 
+            ->orderBy('first_name', 'ASC')
+            ->orderBy('last_name', 'ASC')
+            ->get(['id', 'first_name', 'last_name']);
+
 
         return Inertia('Course/Index', [
             'courses' => $courses,
+            'instructors' => $instructors,
+            'authors' => $authors,
             'filters' => $filters
         ]);
     }
@@ -36,6 +61,9 @@ class CourseController extends Controller
     public function create()
     {
 
+        if (Gate::inspect('create', course::class)){
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to create a course. Please contact your admin.');
+        }
 
         $course_instructors = User::getInstructors()
         ->get()
@@ -46,7 +74,11 @@ class CourseController extends Controller
         ]);
 
 
-        return Inertia('Course/Create', ['instructors' => $course_instructors]);
+        return Inertia('Course/Create', [
+            'instructors' => $course_instructors,
+            'projects' => Project::orderBy('title','ASC')->get()
+        
+        ]);
     }
 
     /**
@@ -55,6 +87,9 @@ class CourseController extends Controller
     public function store(Request $request)
     {
 
+        if (Gate::inspect('create', course::class)){
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to create a course. Please contact your admin.');
+        }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -62,7 +97,8 @@ class CourseController extends Controller
             'short_description' => 'nullable|string',
             'instructor' => 'required|exists:users,id',
             'publish_date' => 'required|date',
-            'expiration_date' => 'required|date|nullable'
+            'expiration_date' => 'required|date|nullable',
+            'project_id' => 'required|exists:project,id'
         ]);
 
         $validated['created_by'] = Auth::id();
@@ -77,6 +113,9 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+
+        $creatorName = $course->createdby;
+
         return Inertia('Course/Show', [
             'course' => $course,
         ]);
@@ -87,6 +126,12 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
+
+
+        if (Gate::inspect('update', $course)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to edit someone else course.');
+        }
+
         $course_instructors = User::getInstructors()->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'dasid' => $user->dasid,
@@ -104,6 +149,11 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
+
+        if (Gate::inspect('update', $course)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to edit someone else Course.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|min:3|max:255',
             'description' => 'nullable|string',
@@ -123,7 +173,12 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
+
+        if (Gate::inspect('delete', $course)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to delete someone else Course!');
+        }
+
+        $course->deleteOrFail();
 
         return redirect()->back()->with(['success' => 'Course deleted successfully!']);
     }

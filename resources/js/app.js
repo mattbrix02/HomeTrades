@@ -3,8 +3,12 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import MainLayout from '@/Layouts/MainLayout.vue'
 import {ZiggyVue} from 'ziggy'
 import '../css/app.css'
+import { initTheme } from './theme.js'
+
+initTheme()
 
 createInertiaApp({
+
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
 

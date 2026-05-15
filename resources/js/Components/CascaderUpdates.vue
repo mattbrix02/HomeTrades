@@ -1,15 +1,15 @@
 <template>
-  <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-200">
-    <h2 class="text-lg font-semibold mb-4 text-slate-800">
-      Cascader Updates
-    </h2>
+  <Box>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-1">
+      <div>
+        <div class="text-gray-500 font-medium mb-2">Cascader Updates</div>
+      </div>
+    </div>
 
-    <div v-if="updates.length">
-      <div
+    <div v-if="updates.length" class="space-y-2">
+      <CourseRow
         v-for="update in updates"
         :key="update.id"
-        class="p-3 mb-2 rounded-lg cursor-pointer
-                 hover:bg-indigo-50 transition"
       >
         <span class="text-xs text-amber-600 font-medium">
           [{{ update.category }}] {{ update.date }}
@@ -17,17 +17,19 @@
         <div class="text-slate-800">
           {{ update.title }}
         </div>
-      </div>
+      </CourseRow>
     </div>
 
     <p v-else class="text-sm text-slate-500">
       No updates available.
     </p>
-  </div>
+  </Box>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import Box from './UI/Box.vue'
+import CourseRow from './UI/CourseRow.vue'
 
 const props = defineProps({
   updates: Object,

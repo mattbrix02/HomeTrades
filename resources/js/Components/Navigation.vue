@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white border-b border-slate-200 shadow-sm">
+  <nav class="bg-white dark:bg-gray-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
       <!-- Logo / Brand -->
       <div class="flex items-center gap-3">
@@ -15,7 +15,8 @@
 
       <!-- Navigation Links -->
       <div class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a v-if="user?.role === 'admin'" :href="route('auth.admin')" class="text-slate-600 hover:text-indigo-600 transition">Dashboard</a>
+        <Link v-if="user?.role === 'admin'" :href="route('auth.admin')" class="text-slate-600 hover:text-indigo-600 transition">Dashboard</Link>
+        <Link v-if="user?.role === 'admin'" :href="route('projects.index')" class="text-slate-600 hover:text-indigo-600 transition">Projects</Link>
         <Link :href="route('courses.index')" class="text-slate-600 hover:text-indigo-600 transition">Courses</Link>
         <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Assessments</a>
         <a href="#" class="text-slate-600 hover:text-indigo-600 transition">Reports</a>
@@ -23,7 +24,24 @@
 
       <!-- Right Section -->
       <div class="flex items-center gap-4">
+        <!-- Theme Switch (single button) -->
+        <label class="theme_switch theme_switch_compact" aria-label="Toggle theme">
+          <input
+            id="checkbox"
+            :checked="theme === 'dark'"
+            type="checkbox"
+            @click.prevent="toggleDarkMode"
+          />
+          <span class="slider">
+            <span v-if="theme !== 'dark'" class="sun_icon" aria-hidden="true">☀</span>
+            <span v-else class="moon_icon" aria-hidden="true">☾</span>
+          </span>
+        </label>
+
+
         <!-- Quick Action -->
+
+
         <button
           v-if="user"
           class="btn_main"
@@ -81,12 +99,29 @@
   </nav>
 </template>
 
+
 <script setup>
-import { computed } from 'vue'
+
+import { computed, ref } from 'vue'
 import { Link, usePage, router } from '@inertiajs/vue3'
+
+
+import { initTheme, toggleTheme } from '@/theme.js'
+
+const toggleDarkMode = () => {
+  theme.value = toggleTheme(theme.value)
+}
+
+
+
 
 const page = usePage()
 const user = computed(() => page.props.user)
+
+const theme = ref(initTheme())
+
+
+
 
 const userInitials = computed(() => {
 
@@ -96,6 +131,72 @@ const userInitials = computed(() => {
 })
 
 const handleLogout = () => {
-  router.delete(route('auth.destroy'))
+  // ziggy route() helper may not be available in this file; fallback to named endpoint.
+  router.delete('/auth/destroy')
 }
+
+
+
 </script>
+
+<style scoped>
+/* Override layout from theme.css so the switch doesn't look like a box */
+:deep(.theme_switch) {
+  width: 3.6rem;
+  height: 2.2rem;
+  border-radius: 9999px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  position: relative;
+}
+
+:deep(input#checkbox) {
+  /* Prevent the raw checkbox from being visible/captured */
+  appearance: none;
+  -webkit-appearance: none;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+:deep(.slider) {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+:deep(.slider) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+:deep(.sun_icon),
+:deep(.moon_icon) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.95rem;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 5;
+  color: #fff;
+}
+
+/* Ensure the label has relative positioning so absolute icons work */
+:deep(.theme_switch) {
+  position: relative;
+}
+
+</style>

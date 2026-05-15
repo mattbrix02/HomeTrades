@@ -8,7 +8,7 @@
     </div>
 
     <div class="mb-4">
-      <CourseFilter :filters="filters" />
+      <CourseFilter :filters="filters" :instructors="instructors" :authors="authors" />
     </div>
 
     <Course :courses="courses" :user="user" />
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import Course from '@/Components/Course.vue'
+import Course from '@/Pages/Course/Components/CourseList.vue'
 import CourseFilter from './Components/CourseFilter.vue'
 
 defineProps({
@@ -27,6 +27,14 @@ defineProps({
   courses: {
     type: Object,
     default: null,
+  },
+  instructors: {
+    type: Array,
+    default: () => [],
+  },
+  authors: {
+    type: Array,
+    default: () => [],
   },
   filters: {
     type: Object,

@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
 
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -32,30 +33,37 @@ class Course extends Model
 
     public function project():BelongsTo {
         return $this->belongsTo(project::class, 'project_id');
-}
+    }
 
 
 
      public function scopeFilter(Builder $query, array $filters):Builder{
 
-        return $query->when(
-            $filters['search'] ?? false,
-            fn(Builder $query, $value): Builder => 
-                $query->where(function (Builder $query) use ($value) {
-                    $query->where('title', 'LIKE', "%{$value}%")
-                        ->orWhere('description', 'LIKE', "%{$value}%")
-                        ->orWhere('short_description', 'LIKE', "%{$value}%");
+
+        return $query
+            ->when(
+                $filters['search'] ?? false,
+                fn(Builder $query, $value): Builder => 
+                    $query->where(function (Builder $query) use ($value) {
+                        $query->where('title', 'LIKE', "%{$value}%")
+                            ->orWhere('description', 'LIKE', "%{$value}%")
+                            ->orWhere('short_description', 'LIKE', "%{$value}%");
             })
+            )
+            ->when(
+                $filters['instructor'] ?? false,
+                fn(Builder $query, $value): Builder => 
+                    $query->where('instructor', '=', $value)
+            )->when(
+                $filters['showDeleted'] ?? false,
+                fn(Builder $query, $value): mixed => $query->withTrashed()
+            )->when(
+                $filters['author'] ?? false,
+                fn(Builder $query, $value): Builder => $query->where('created_by','=',$value)
             );
             /*
-            ->when(
-                $filters['priceTo'] ?? false,
-                fn(Builder $query, $value): Builder => $query->where('price','<=',$value)
-            )
-            ->when(
-                $filters['beds'] ?? false,
-                fn(Builder $query, $value): Builder => $query->where('beds',(int)$value < 6 ? '=' : '>=',$value)
-            )
+           
+
             ->when(
                 $filters['baths'] ?? false,
                 fn(Builder $query, $value): Builder => $query->where('baths',(int)$value < 6 ? '=' : '>=',$value)
@@ -68,9 +76,7 @@ class Course extends Model
                 $filters['areaTo'] ?? false,
                 fn(Builder $query, $value): Builder => $query->where('area','<=',$value)
             )
-            ->when(
-                $filters['deleted'] ?? false,
-                fn(Builder $query, $value): mixed => $query->withTrashed()
+            
             )->when(
                 $filters['by'] ?? false,
                 fn (Builder $query, $value) =>
@@ -81,3 +87,4 @@ class Course extends Model
     }
 
 }
+

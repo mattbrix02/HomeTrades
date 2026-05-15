@@ -1,36 +1,71 @@
+@import './theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
 
+
+
+
 @layer components {
 
+    /* Shared form controls */
+    .field {
+        @apply w-full rounded-lg border border-slate-200 bg-white text-slate-800 shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400
+               px-3 py-2 text-sm transition
+               dark:bg-gray-900 dark:border-slate-700 dark:text-slate-200;
+    }
+
+    .field::placeholder {
+        @apply text-slate-400 dark:text-slate-500;
+    }
+
+    .field-select {
+        @apply appearance-none bg-[length:0_0] pr-10;
+    }
+
+    /* Shared checkbox */
+    .field-checkbox {
+        @apply w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/30
+               dark:border-slate-600 dark:bg-gray-900;
+    }
+
     .course_row {
-        @apply p-4 rounded-lg border border-slate-200 bg-white hover:shadow-md transition
+        @apply p-4 rounded-lg border border-slate-200 bg-white
+               hover:shadow-lg hover:border-indigo-300
+               transition
+               dark:bg-gray-900 dark:border-slate-700
+               dark:hover:border-indigo-400 dark:hover:shadow-lg;
     }
 
 
-    .btn_main {
-        @apply inline-flex items-center justify-center px-4 py-2 rounded-xl text-white font-medium
+
+
+.btn_main {
+        @apply inline-flex items-center justify-center px-4 py-2 rounded-xl text-white font-medium text-sm
                bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600
-               shadow-md transition
+               shadow-sm hover:shadow-md transition
+               focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:ring-offset-2
+               dark:focus:ring-offset-gray-900;
     }
+
 
     .btn_view {
-        @apply px-3 py-1 text-sm rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition
+        @apply px-3 py-1 text-sm sm:text-xs sm:px-2 rounded-lg sm:rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 transition
     }
 
     .btn_edit {
-        @apply px-3 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition
+        @apply px-3 py-1 text-sm sm:text-xs sm:px-2 rounded-lg first-line:sm:rounded-md  bg-blue-100 text-blue-700 hover:bg-blue-200 transition
     }
 
     .btn_delete {
-        @apply px-3 py-1 text-sm rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition
+        @apply px-3 py-1 text-sm sm:text-xs sm:px-2 rounded-lg sm:rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition
     }
 
     .btn_cancel {
-        @apply inline-flex items-center justify-center px-4 py-2 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 transition
+        @apply  px-4 py-2 sm:text-xs sm:px-2 rounded-xl sm:rounded-md inline-flex items-center justify-center  bg-slate-300 text-slate-700 hover:bg-slate-200 transition
     }
 
     .sub_label{ 

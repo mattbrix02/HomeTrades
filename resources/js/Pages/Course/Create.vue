@@ -57,9 +57,38 @@
         </div>
 
 
+        <SubBox class="flex justify-between sm:flex-row gap-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Author</label>
+            <select v-model="form.instructor" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+              <option value="" disabled>Select an Instructor</option>
+              <option v-for="instructor in props.instructors" :key="instructor.id" :value="instructor.id">
+                {{ instructor.name }}
+              </option>
+            </select>
+
+            <div v-if="form.errors.instructor" class="input-error">
+              {{ form.errors.instructor }}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Project</label>
+            <select v-model="form.project" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+              <option value="" disabled>Link to a project</option>
+              <option v-for="project in props.projects" :key="project.id" :value="project.id">
+                {{ project.title }}
+              </option>
+            </select>
+
+            <div v-if="form.errors.instructor" class="input-error">
+              {{ form.errors.project }}
+            </div>
+          </div>
+        </SubBox>
 
         
-        <div class="flex flex-col sm:flex-row gap-3">
+        <SubBox class="flex flex-col sm:flex-row gap-3">
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Publish date</label>
             <input
@@ -87,23 +116,10 @@
               {{ form.errors.expiration_date }}
             </div>
           </div>
+        </SubBox>
 
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-2">Instructor</label>
+        
 
-
-            <select v-model="form.instructor" class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
-              <option value="" disabled>Select an Instructor</option>
-              <option v-for="instructor in props.instructors" :key="instructor.id" :value="instructor.id">
-                {{ instructor.name }}
-              </option>
-            </select>
-
-            <div v-if="form.errors.instructor" class="input-error">
-              {{ form.errors.instructor }}
-            </div>
-          </div>
-        </div>
         
 
         <div class="flex justify-between">
@@ -128,6 +144,7 @@
 </template>
 
 <script setup>
+import SubBox from '@/Components/UI/SubBox.vue'
 import Tiptap from '@/Components/vendor/tiptap.vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
@@ -136,9 +153,14 @@ import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
   instructors: {
-    type: Array,   
-    default: () => [],
+    type: Object,   
+    default: null,
   },
+  projects: {
+    type: Object,   
+    default: null,
+  },
+
 })
 
 const { user } = usePage().props
@@ -151,6 +173,7 @@ const form = useForm({
   short_description: null,
   publish_date:null,
   expiration_date:null,
+  project:null,
 })
 
 const create = () => form.post(route('courses.store'))

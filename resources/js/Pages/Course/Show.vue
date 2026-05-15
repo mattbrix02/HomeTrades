@@ -1,24 +1,22 @@
 <template>
-  <main class="min-h-screen mx-auto my-10 p-6 max-w-4xl">
+  <Main>
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
         <h1 class="text-3xl font-bold text-slate-900">{{ course.title }}</h1>
-        <p class="mt-2 text-slate-600">Review course details</p>
       </div>
       <Link
 
-        class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 transition"
+        class="btn_cancel"
         :href="route('courses.index')"
       >
         Back to courses
       </Link>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 space-y-6">
-      <div class="space-y-2">
-        <h2 class="text-xl font-semibold text-slate-900">Instructor</h2>
-        <p class="text-slate-700">{{ course.instructor || 'No instructor assigned yet.' }}</p>
-      </div>
+    <Box class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 space-y-6">
+      <template #header>
+        Course details
+      </template>
 
       <div class="space-y-2">
         <h2 class="text-xl font-semibold text-slate-900">Short Description</h2>
@@ -37,21 +35,48 @@
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
-        <div class="sub_label">
-          <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Course ID</h3>
-          <p class="mt-2 text-slate-900">{{ course.id }}</p>
-        </div>
-        <div class="sub_label">
-          <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Last updated</h3>
+        <SubBox>
+          <template #header>
+            Author
+          </template>
+          <p class="mt-2 text-slate-900">{{ course.createdby.first_name + ' ' + course.createdby.last_name || 'No instructor assigned yet.' }}</p>
+        </SubBox>
+        <SubBox>
+          <template #header>
+            Last updated
+          </template>
+
           <p class="mt-2 text-slate-900">{{ postedTime || 'N/A' }}</p>
           <p class="mt-2 text-slate-900">{{ postedDate || 'N/A' }}</p>
-        </div>
+        </SubBox>
       </div>
-    </div>
-  </main>
+    </Box>
+
+    <Box>
+      <template #header>
+        Lessons
+      </template>
+
+      <CourseRow>
+        test
+      </CourseRow>
+
+      <CourseRow>
+        test
+      </CourseRow>
+
+      <CourseRow>
+        test
+      </CourseRow>
+    </Box>
+  </Main>
 </template>
 
 <script setup>
+import Box from '@/Components/UI/Box.vue'
+import CourseRow from '@/Components/UI/CourseRow.vue'
+import Main from '@/Components/UI/Main.vue'
+import SubBox from '@/Components/UI/SubBox.vue'
 import { usePage, Link } from '@inertiajs/vue3'
 import { computed } from 'vue'
 

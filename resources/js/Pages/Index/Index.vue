@@ -1,5 +1,5 @@
 <template>
-  <main class="min-h-screen mx-auto my-10 p-6 max-w-6xl space-y-8 bg-slate-50">
+  <Main>
     <!-- Header -->
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold text-slate-900">
@@ -73,14 +73,15 @@
 
       <CascaderUpdates :updates="updates" />
     </div>
-  </main>
+  </Main>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-import Course from '../../Components/Course.vue'
+import Course from '@/Pages/Course/Components/CourseList.vue'
 import CascaderUpdates from '@/Components/CascaderUpdates.vue'
+import Main from '@/Components/UI/Main.vue'
 
 
 // Search
