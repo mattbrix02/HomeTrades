@@ -71,18 +71,4 @@ border-slate-200,
   box-shadow: 0 0 0 2px var(--km-ring) !important;
 }
 
-/* Tiptap content often uses its own colors */
-.tiptap-prosemirror {
-  color: var(--km-text) !important;
-}
-
-.tiptap-prosemirror p,
-.tiptap-prosemirror ul,
-.tiptap-prosemirror ol {
-  color: var(--km-text) !important;
-}
-
-html.dark .tiptap-prosemirror a {
-  color: #93c5fd !important; /* light blue */
-}
 

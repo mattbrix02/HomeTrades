@@ -4,8 +4,18 @@
       <div>
         <div class="text-gray-500 font-medium mb-1">Courses</div>
       </div>
+
+
       <Link
-        v-if="user?.role === 'admin'"
+        v-if="user?.role === 'admin' && project !== null"
+        class="btn_main"
+        :href="route('projects.courses.create', {project:project})"
+      >
+        <div>+ Course</div>
+      </Link>
+
+      <Link
+        v-else-if="user?.role === 'admin'"
         class="btn_main"
         :href="route('courses.create')"
       >
@@ -39,14 +49,14 @@
                 >
                   Edit
                 </Link>
-                <Link
+
+                <button
                   v-if="user?.role === 'admin' || user?.id === course.created_by"
                   class="btn_delete"
-                  :href="route('courses.destroy', course)"
-                  method="DELETE"
+                  @click="confirmDelete(course)"
                 >
                   Delete
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -73,10 +83,11 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import Pagination from '@/Components/UI/Pagination.vue'
 import Box from '@/Components/UI/Box.vue'
 import CourseRow from '@/Components/UI/CourseRow.vue'
+import Swal from 'sweetalert2'
 
 const props = defineProps({
   user :{
@@ -87,6 +98,11 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  project: {
+    type: Object,
+    default: null,
+  },
+
 })
 
 // UPDATED: Helper function to format time and date
@@ -96,5 +112,25 @@ const formatCreatedAt = (timestamp) => {
   const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   const dateString = date.toDateString() // Returns full date name
   return `${time} | ${dateString}`
+}
+
+const confirmDelete = async (course) => {
+  const result = await Swal.fire({
+    title: 'Delete Course?',
+    text: `"${course.title}" will be permanently deleted.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#d33',
+  })
+
+  if (!result.isConfirmed) {
+    return
+  }
+
+  router.delete(route('courses.destroy', course), {
+    preserveScroll: true,
+  })
 }
 </script>

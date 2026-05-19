@@ -2,99 +2,102 @@
   <Box>
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-1">
       <div>
-        <div class="text-gray-500 font-medium mb-1">Courses</div>
+        <div class="text-gray-500 font-medium mb-1">Projects</div>
       </div>
       <Link
         v-if="user?.role === 'admin'"
         class="btn_main"
-        :href="route('courses.create')"
+        :href="route('projects.create')"
       >
-        <div>+ Course </div>
+        <div>+ Project</div>
       </Link>
     </div>
 
     <div>
-      <div v-if="props.courses.data.length" class="space-y-2">
-        <CourseRow
-          v-for="course in courses.data"
-          :key="course.id"
-        >
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            <div class>
-              <h3 class="font-semibold text-slate-900">{{ course.title }}</h3>
-            </div>
+      <div v-if="props.projects?.data?.length" class="space-y-3">
+        <div v-for="project in projects.data" :key="project.id" class="p-4 rounded-xl border border-slate-200">
+          <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="flex flex-wrap gap-2 opacity-0 group-hover:opacity-100 transition justify-end">
-                <Link
+              <div class="font-semibold text-slate-900">{{ project.title }}</div>
+            </div>
 
-                  class="btn_view"
-                  :href="route('courses.show', course)"
-                >
-                  View
-                </Link>
-                <Link
-                  v-if="user?.role === 'admin' || user?.id === course.created_by"
-                  class="btn_edit"
-                  :href="route('courses.edit', course)"
-                >
-                  Edit
-                </Link>
-                <Link
-                  v-if="user?.role === 'admin' || user?.id === course.created_by"
-                  class="btn_delete"
-                  :href="route('courses.destroy', course)"
-                  method="DELETE"
-                >
-                  Delete
-                </Link>
-              </div>
+            <div class="flex items-center gap-3">
+              <Link
+                class="btn_view"
+                :href="route('projects.show', project.id)"
+              >
+                View
+              </Link>
+
+
+              <Link
+                v-if="user?.role === 'admin'"
+                class="btn_edit"
+                :href="route('projects.edit', project.id)"
+              >
+                Edit
+              </Link>
+
+
+              <button
+                v-if="user?.role === 'admin' || user?.id === project.created_by"
+                class="btn_delete"
+                @click="confirmDelete(project)"
+              >
+                Delete
+              </button>
             </div>
           </div>
-          <div>
-            <p 
-              class="text-slate-700" 
-              v-html="course.short_description || '<i>No short description provided yet.</i>'"
-            />
+        </div>
 
-
-            <p v-if="course.created_at" class="text-sm text-slate-600">
-              {{ formatCreatedAt(course.created_at) }}
-            </p>
-          </div>
-        </CourseRow>
-        <Pagination :links="courses.links" />
+        <Pagination :links="projects.links" />
       </div>
 
       <p v-else class="text-sm text-slate-500 text-center py-4">
-        No courses available. Create your first course!
+        No projects available.
       </p>
     </div>
   </Box>
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import Pagination from '@/Components/UI/Pagination.vue'
 import Box from '@/Components/UI/Box.vue'
-import CourseRow from '@/Components/UI/CourseRow.vue'
+import Swal from 'sweetalert2'
+
 
 const props = defineProps({
-  user :{
+  user: {
     type: Object,
     default: null,
   },
-  courses: {
+  projects: {
     type: Object,
     default: null,
   },
 })
 
-// UPDATED: Helper function to format time and date
-const formatCreatedAt = (timestamp) => {
-  if (!timestamp) return ''
-  const date = new Date(timestamp)
-  const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  const dateString = date.toDateString() // Returns full date name
-  return `${time} | ${dateString}`
+
+
+const confirmDelete = async (project) => {
+  const result = await Swal.fire({
+    title: 'Delete Project?',
+    text: `"${project.title}" will be permanently deleted.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#d33',
+  })
+
+  if (!result.isConfirmed) {
+    return
+  }
+
+  router.delete(route('projects.destroy', project), {
+    preserveScroll: true,
+  })
 }
 </script>
+

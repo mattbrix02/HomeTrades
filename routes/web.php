@@ -23,8 +23,11 @@ Route::resource('courses', CourseController::class)->only(['index', 'show']);
 Route::resource('projects', ProjectController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->middleware('auth');
 Route::resource('projects', ProjectController::class)->only(['index', 'show']);
 
+    //For project+course
+    Route::get('/projects/{project}/courses/create', [CourseController::class, 'createFromProject'])
+        ->name('projects.courses.create');
 
-//Auth & Login
+    //Auth & Login
 Route::get('/login', [AuthController::class, 'create'])->name('login')->middleware('guest');
 Route::resource('auth', AuthController::class);
 
@@ -39,3 +42,6 @@ Route::get('/admin', [AuthController::class, 'admin'])->middleware('auth')->name
 
 //Registration
 Route::resource('register', RegistrationController::class);
+
+require __DIR__ . '/tiptap.php';
+

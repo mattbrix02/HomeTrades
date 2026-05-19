@@ -1,7 +1,94 @@
+@import 'quill/dist/quill.snow.css';
 @import './theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Fix: un-scope Quill content styles so they work on display pages ──
+   All rules use !important to override any theme/container styles.
+   Extracted from quill.snow.css so they apply outside .ql-editor context. */
+
+/* Lists */
+ul.ql-editor,
+.ql-editor ul { list-style-type: disc !important; padding-left: 1.5em !important; }
+ol.ql-editor,
+.ql-editor ol { list-style-type: decimal !important; padding-left: 1.5em !important; }
+
+ul, ol { list-style-type: disc !important; padding-left: 1.5em !important; }
+ol { list-style-type: decimal !important; }
+li { padding-left: 0.5em !important; position: relative !important; }
+li::marker { color: inherit !important; }
+
+/* Alignment */
+p.ql-align-center  { text-align: center   !important; }
+p.ql-align-right   { text-align: right    !important; }
+p.ql-align-justify { text-align: justify  !important; }
+h1.ql-align-center  { text-align: center   !important; }
+h1.ql-align-right   { text-align: right    !important; }
+h1.ql-align-justify { text-align: justify  !important; }
+h2.ql-align-center  { text-align: center   !important; }
+h2.ql-align-right   { text-align: right    !important; }
+h2.ql-align-justify { text-align: justify  !important; }
+h3.ql-align-center  { text-align: center   !important; }
+h3.ql-align-right   { text-align: right    !important; }
+h3.ql-align-justify { text-align: justify  !important; }
+h4.ql-align-center  { text-align: center   !important; }
+h4.ql-align-right   { text-align: right    !important; }
+h4.ql-align-justify { text-align: justify  !important; }
+blockquote.ql-align-center  { text-align: center   !important; padding-left: 0 !important; padding-right: 0 !important; }
+blockquote.ql-align-right   { text-align: right    !important; }
+blockquote.ql-align-justify { text-align: justify  !important; }
+ul.ql-align-center,
+ul.ql-align-right,
+ul.ql-align-justify { text-align: inherit !important; }
+ol.ql-align-center,
+ol.ql-align-right,
+ol.ql-align-justify { text-align: inherit !important; }
+
+/* Fonts */
+.ql-font-serif     { font-family: Georgia, 'Times New Roman', serif   !important; }
+.ql-font-monospace { font-family: Monaco, 'Courier New', monospace   !important; }
+
+/* Sizes */
+.ql-size-small { font-size: 0.75em  !important; }
+.ql-size-large { font-size: 1.5em  !important; }
+.ql-size-huge  { font-size: 2.5em  !important; }
+
+/* Colours */
+.ql-color-black   { color: #000    !important; }
+.ql-color-red     { color: #e60000 !important; }
+.ql-color-orange  { color: #f90    !important; }
+.ql-color-yellow  { color: #ff0   !important; }
+.ql-color-green   { color: #008a00!important; }
+.ql-color-blue    { color: #06c   !important; }
+.ql-color-purple  { color: #93f   !important; }
+.ql-color-white   { color: #fff   !important; }
+
+/* Backgrounds */
+.ql-bg-black   { background-color: #000    !important; }
+.ql-bg-red     { background-color: #e60000 !important; }
+.ql-bg-orange  { background-color: #f90    !important; }
+.ql-bg-yellow  { background-color: #ff0    !important; }
+.ql-bg-green   { background-color: #008a00 !important; }
+.ql-bg-blue    { background-color: #06c    !important; }
+.ql-bg-purple  { background-color: #93f   !important; }
+.ql-bg-white   { background-color: #fff   !important; }
+
+/* Indentation */
+li.ql-indent-1 { padding-left: 4.5em  !important; }
+li.ql-indent-2 { padding-left: 7.5em  !important; }
+li.ql-indent-3 { padding-left: 10.5em !important; }
+li.ql-indent-4 { padding-left: 13.5em !important; }
+li.ql-indent-5 { padding-left: 16.5em !important; }
+li.ql-indent-6 { padding-left: 19.5em !important; }
+li.ql-indent-7 { padding-left: 22.5em !important; }
+li.ql-indent-8 { padding-left: 25.5em !important; }
+li.ql-indent-9 { padding-left: 28.5em !important; }
+
+/* Bold / Italic / Underline */
+strong, b { font-weight: bold   !important; }
+em, i     { font-style: italic  !important; }
+u         { text-decoration: underline !important; }
 
 
 
@@ -10,7 +97,7 @@
 
 @layer components {
 
-    /* Shared form controls */
+/* Shared form controls */
     .field {
         @apply w-full rounded-lg border border-slate-200 bg-white text-slate-800 shadow-sm
                focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400
@@ -19,11 +106,20 @@
     }
 
     .field::placeholder {
-        @apply text-slate-400 dark:text-slate-500;
+        @apply text-slate-400 dark:text-slate-700;
     }
 
     .field-select {
-        @apply appearance-none bg-[length:0_0] pr-10;
+        @apply appearance-none bg-[length:0_0] pr-10 dark:text-slate-200;
+    }
+
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        @apply !text-slate-700 dark:!text-slate-200 ;
+    }
+
+    /* Validation errors */
+    .input-error {
+        @apply mt-1 text-xs text-red-600 font-medium dark:text-red-400;
     }
 
     /* Shared checkbox */
@@ -65,32 +161,12 @@
     }
 
     .btn_cancel {
-        @apply  px-4 py-2 sm:text-xs sm:px-2 rounded-xl sm:rounded-md inline-flex items-center justify-center  bg-slate-300 text-slate-700 hover:bg-slate-200 transition
+        @apply  px-4 py-2 sm:text-xs sm:px-2 rounded-xl sm:rounded-md inline-flex items-center justify-center  bg-slate-300 text-slate-700 hover:bg-slate-200 transition dark:text-slate-700
     }
 
     .sub_label{ 
         @apply rounded-2xl border border-slate-200 bg-slate-50 p-4
     }
 
-    /* Tiptap styling (make lists visible) */
-    .tiptap-prosemirror {
-        ul, ol {
-            list-style-position: inside;
-            padding-left: 0;
-            margin-left: 0;
-        }
-        li {
-            display: list-item;
-            list-style-position: inside;
-        }
-    }
-
-    .tiptap-prosemirror ul {
-        list-style-type: disc;
-    }
-
-    .tiptap-prosemirror ol {
-        list-style-type: decimal;
-    }
 
 }

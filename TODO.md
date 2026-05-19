@@ -1,14 +1,10 @@
 # TODO
 
-- [ ] Update `app/Policies/ProjectPolicy.php` to allow admin-only create/update/delete and related abilities.
-- [ ] Update `app/Http/Requests/StoreProjectRequest.php` authorize() to admin-only.
-- [ ] Update `app/Http/Requests/UpdateProjectRequest.php` authorize() to admin-only.
-- [ ] Implement admin-only CRUD in `app/Http/Controllers/ProjectController.php`.
-- [ ] Ensure `destroy` archives projects via SoftDeletes.
-- [ ] Implement Inertia page(s) needed for Project create/edit (if missing):
-  - [ ] `resources/js/Pages/Project/Create.vue`
-  - [ ] `resources/js/Pages/Project/Edit.vue`
-  - [ ] `resources/js/Pages/Project/Index.vue` / list usage alignment
-- [ ] Add/adjust any frontend links to use `projects.*` routes instead of `courses.*` (if required).
-- [ ] Run basic checks: `php artisan route:list` and a quick lint/test if available.
+- [x] Brainstorm/confirm UI cleanup plan for Course Create/Edit pages
+- [x] Update `resources/js/Pages/Course/Create.vue` layout + field styling consistency
+- [x] Update `resources/js/Pages/Course/Edit.vue` layout + field styling consistency
+- [x] Fix Description / Short Description editors to use proper rich-text editor component
+- [x] Verify instructor/project/datepicker fields show correct errors
+- [x] Quick manual check: forms submit routes + values bind correctly
+
 

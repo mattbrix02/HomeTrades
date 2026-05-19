@@ -13,6 +13,10 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.amd,
+        route: 'readonly',
+        snap: 'readonly',
+        _: 'readonly',
+        Swal: 'readonly',
       },
     },
     plugins: {
@@ -45,5 +49,5 @@ export default [
       ],
       'vue/no-v-text-v-html-on-component': 'off',
     },
-  }
+  },
 ]

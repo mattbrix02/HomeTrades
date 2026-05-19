@@ -31,7 +31,7 @@ class Course extends Model
             return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function project():BelongsTo {
+    public function projects():BelongsTo {
         return $this->belongsTo(project::class, 'project_id');
     }
 

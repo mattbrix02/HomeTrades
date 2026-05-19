@@ -60,24 +60,42 @@ class CourseController extends Controller
      */
     public function create()
     {
-
-        if (Gate::inspect('create', course::class)){
-            return redirect()->route('courses.index')->with('error', 'You are not allowed to create a course. Please contact your admin.');
+        if (Gate::inspect('create', Course::class)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed.');
         }
-
+    
         $course_instructors = User::getInstructors()
-        ->get()
-        ->map(fn ($user) => [
-            'id' => $user->id,
-            'dasid' => $user->dasid,
-            'name' => $user->first_name . ' ' . $user->last_name
-        ]);
-
-
+            ->get()
+            ->map(fn ($user) => [
+                'id' => $user->id,
+                'dasid' => $user->dasid,
+                'name' => $user->first_name . ' ' . $user->last_name
+            ]);
+    
         return Inertia('Course/Create', [
             'instructors' => $course_instructors,
             'projects' => Project::orderBy('title','ASC')->get()
-        
+        ]);
+    }
+
+    public function createFromProject(Project $project)
+    {
+        if (Gate::inspect('create', Course::class)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed.');
+        }
+    
+        $course_instructors = User::getInstructors()
+            ->get()
+            ->map(fn ($user) => [
+                'id' => $user->id,
+                'dasid' => $user->dasid,
+                'name' => $user->first_name . ' ' . $user->last_name
+            ]);
+    
+        return Inertia('Course/Create', [
+            'instructors' => $course_instructors,
+            'projects' => Project::orderBy('title','ASC')->get(),
+            'project' => $project // This will be the Project model or null
         ]);
     }
 
@@ -87,9 +105,11 @@ class CourseController extends Controller
     public function store(Request $request)
     {
 
-        if (Gate::inspect('create', course::class)){
-            return redirect()->route('courses.index')->with('error', 'You are not allowed to create a course. Please contact your admin.');
+        if (Gate::inspect('create', course::class)->denied()) {
+            return redirect()->route('courses.index')->with('error', 'You are not allowed to edit someone else course.');
         }
+
+
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -98,14 +118,13 @@ class CourseController extends Controller
             'instructor' => 'required|exists:users,id',
             'publish_date' => 'required|date',
             'expiration_date' => 'required|date|nullable',
-            'project_id' => 'required|exists:project,id'
+            'project_id' => 'required|exists:projects,id'
         ]);
 
         $validated['created_by'] = Auth::id();
 
         $course = Course::create($validated);
-
-        return redirect()->route('courses.index')->with('success','Course was created!');
+        return redirect()->back()->with('success', 'Course created successfully.');
     }
 
     /**
@@ -132,15 +151,18 @@ class CourseController extends Controller
             return redirect()->route('courses.index')->with('error', 'You are not allowed to edit someone else course.');
         }
 
-        $course_instructors = User::getInstructors()->get()->map(fn ($user) => [
+        $course_instructors = User::getInstructors()
+            ->get()
+            ->map(fn ($user) => [
                 'id' => $user->id,
                 'dasid' => $user->dasid,
                 'name' => $user->first_name . ' ' . $user->last_name
-        ]);
+            ]);
 
         return Inertia('Course/Edit', [
             'course' => $course,
-            'instructors' => $course_instructors
+            'instructors' => $course_instructors,
+            'projects' => Project::orderBy('title','ASC')->get(),
         ]);
     }
 
